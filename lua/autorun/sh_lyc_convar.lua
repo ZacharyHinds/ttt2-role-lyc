@@ -1,0 +1,5 @@
+CreateConVar("ttt2_lyc_maxhealth", "125", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Unleashed Lycanthrope's max health")
+CreateConVar("ttt2_lyc_armor", "40", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Unleashed Lycanthrope's armor")
+CreateConVar("ttt2_lyc_health_regen", "1", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Lycanthrope's health regen")
+CreateConVar("ttt2_lyc_speed", "1.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Lycanthrope's speed multiplier")
+CreateConVar("ttt2_lyc_stamina", "1.5", {FCVAR_NOTIFY, FCVAR_ARCHIVE}, "Lycanthrope's stamina multiplier")
