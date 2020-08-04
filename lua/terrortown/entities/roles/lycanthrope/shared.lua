@@ -1,11 +1,11 @@
 if SERVER then
   AddCSLuaFile()
-  resource.AddFile()
+  resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_lyc.vmt")
   util.AddNetworkString("ttt2_lyc_transform")
 end
 
 function ROLE:PreInitialize()
-  self.color = Color()
+  self.color = Color(77, 138, 30, 255)
 
   self.abbr = "lyc"
   self.surviveBonus = 0
@@ -31,7 +31,7 @@ end
 if SERVER then
   local function ResetLycanthrope(ply)
     ply:SetNWBool("LycTransformed", false)
-    timer.Remove("LycHealthRegen" .. ply:SteamID())
+    ply.lycRegen = nil
   end
 
   local function ResetAllLycanthropes()
@@ -55,22 +55,51 @@ if SERVER then
     return (count > 0)
   end
 
-  local function UnleashLycanthrope(ply))
+  local function UnleashLycanthrope(ply)
     if HasTeammates(ply) then return end
-    ply:SetNWBool("LycTransformed")
+    ply:SetNWBool("LycTransformed", true)
     ply:SetMaxHealth(GetConVar("ttt2_lyc_maxhealth"):GetInt())
     ply:GiveArmor(GetConVar("ttt2_lyc_armor"):GetInt())
+    SendFullStateUpdate()
 
-    timer.Create("LycTransformed" .. ply:SteamID(), 0.5, 0, function()
-      local new_health = ply:Health() + GetConVar("ttt2_lyc_health_regen")
-      if new_health > ply:GetMaxHealth() then new_health = ply:GetMaxHealth() end
-
-      ply:SetHealth(new_health)
-    end)
 
     net.Start("ttt2_lyc_transform")
     net.Broadcast()
+    ply.lycRegen = CurTime()
   end
+
+  hook.Add("Think", "LycRegenThink", function()
+    for _, ply in ipairs(player.GetAll()) do
+      if not ply:Alive() or ply:IsSpec() or ply:GetSubRole() ~= ROLE_LYCANTHROPE then continue end
+
+      if not ply:GetNWBool("LycTransformed") then continue end
+
+      if ply.lycRegen <= CurTime() then
+        ply:SetHealth(math.Clamp(ply:Health() + GetConVar("ttt2_lyc_health_regen"):GetInt(), 0, ply:GetMaxHealth()))
+        ply.lycRegen = CurTime() + 1
+      end
+    end
+  end)
+
+  hook.Add("EntityTakeDamage", "LycTakeDamage", function(ply, dmginfo)
+    if not IsValid(ply) or not ply:IsPlayer() or ply:IsSpec() or not ply:Alive() then return end
+    if ply:GetSubRole() ~= ROLE_LYCANTHROPE or not ply:GetNWBool("LycTransformed") then return end
+    if dmginfo:GetDamage() > ply:Health() then return end
+
+    ply.lycRegen = CurTime() + GetConVar("ttt2_lyc_health_delay"):GetInt()
+  end)
+
+  hook.Add("EntityTakeDamage", "LycDealDamage", function(ply, dmginfo)
+    if not IsValid(ply) or not ply:IsPlayer() or ply:IsSpec() or not ply:Alive() then return end
+    local attacker = dmginfo:GetAttacker()
+
+    if not IsValid(attacker) or not attacker:IsPlayer() then return end
+    if attacker:GetSubRole() ~= ROLE_LYCANTHROPE or not attacker:GetNWBool("LycTransformed") then return end
+
+    local dmg_mult = GetConVar("ttt2_lyc_dmg"):GetFloat()
+
+    dmginfo:ScaleDamage(dmg_mult)
+  end)
 
   hook.Add("TTT2PostPlayerDeath", "OnLycTeamDeath", function(victim, _, attacker)
     for _, ply in ipairs(player.GetAll()) do
@@ -91,7 +120,7 @@ if SERVER then
 
   hook.Add("PlayerDisconnected", "LycDisconnectTeam", function(ply)
     for _, pl in ipairs(player.GetAll()) do
-      if pl:GetSubRole ~= ROLE_LYCANTHROPE or not pl:Alive() or pl:IsSpec() then continue end
+      if pl:GetSubRole() ~= ROLE_LYCANTHROPE or not pl:Alive() or pl:IsSpec() then continue end
       if pl:HasTeam(ply:GetTeam()) then
         UnleashLycanthrope(pl)
       end
@@ -132,5 +161,4 @@ if SERVER then
   hook.Add("TTTEndRound", "ResetLycanthrope", ResetAllLycanthropes)
   hook.Add("TTTPrepareRound", "ResetLycanthrope", ResetAllLycanthropes)
   hook.Add("TTTBeginRound", "ResetLycanthrope", ResetAllLycanthropes)
-
 end
