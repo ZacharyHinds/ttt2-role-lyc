@@ -1,6 +1,7 @@
 if SERVER then
   AddCSLuaFile()
   resource.AddFile("materials/vgui/ttt/dynamic/roles/icon_lyc.vmt")
+  resource.AddFile("sound/ttt2/wolf.mp3")
   util.AddNetworkString("ttt2_lyc_transform")
 end
 

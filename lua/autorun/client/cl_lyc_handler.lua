@@ -1,5 +1,6 @@
 net.Receive("ttt2_lyc_transform", function()
   local client = LocalPlayer()
+  surface.PlaySound("ttt2/wolf.mp3")
 
   if client:GetSubRole() ~= ROLE_LYCANTHROPE then
     EPOP:AddMessage(
