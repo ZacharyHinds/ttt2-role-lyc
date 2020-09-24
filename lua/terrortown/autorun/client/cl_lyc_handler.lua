@@ -27,11 +27,11 @@ hook.Add("TTTRenderEntityInfo", "ttt2_lyc_multiplier", function(tData)
 
   local client = LocalPlayer()
 
-  if client:GetSubRole() ~= ROLE_LYCANTHROPE then return end
+  if client:GetSubRole() ~= ROLE_LYCANTHROPE or not client:GetNWBool("LycTransformed") then return end
 
   local multiplier = math.Round(GetConVar("ttt2_lyc_dmg"):GetFloat(), 1)
 
-  if not (multiplier > 1) then return end
+  if multiplier <= 1 then return end
 
   if tData:GetAmountDescriptionLines() > 0 then
     tData:AddDescriptionLine()
