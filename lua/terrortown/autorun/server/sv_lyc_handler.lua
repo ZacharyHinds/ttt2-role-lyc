@@ -23,7 +23,7 @@ local function HasTeammates(ply)
     end
   end
 
-  return (count > 0)
+  return count > 0
 end
 
 local function UnleashLycanthrope(ply)
