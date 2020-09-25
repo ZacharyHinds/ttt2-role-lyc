@@ -48,7 +48,7 @@ hook.Add("Think", "LycRegenThink", function()
 
     if ply.lycRegen <= CurTime() then
       ply:SetHealth(math.Clamp(ply:Health() + GetConVar("ttt2_lyc_health_regen"):GetInt(), 0, ply:GetMaxHealth()))
-      ply.lycRegen = CurTime() + 1
+      ply.lycRegen = CurTime() + GetConVar("ttt2_lyc_regen_rate"):GetFloat()
     end
   end
 end)
