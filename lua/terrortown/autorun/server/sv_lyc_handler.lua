@@ -105,7 +105,11 @@ hook.Add("TTT2SpecialRoleSyncing", "TTT2RoleLycHide", function(ply, tbl)
 
   for lyc in pairs(tbl) do
     if lyc:GetSubRole() == ROLE_LYCANTHROPE and not lyc:GetNWBool("LycTransformed") then
-      tbl[lyc] = {ROLE_INNOCENT, TEAM_INNOCENT}
+      if ply:GetSubRole() == ROLE_LYCANTHROPE then
+        tbl[lyc] = {ROLE_INNOCENT, TEAM_INNOCENT}
+      else
+        tbl[lyc] = {ROLE_NONE, TEAM_NONE}
+      end
     end
   end
 end)
