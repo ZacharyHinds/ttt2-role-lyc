@@ -15,3 +15,10 @@ L["ttt2_lyc_transform_title"] = "The Full Moon Rises!"
 L["ttt2_lyc_transform_body"] = "The Lycanthrope has been unleashed!"
 L["ttt2_lyc_self_transform_body"] = "You are the Lycanthrope! Your powers have been unleashed!"
 L["ttt2_lyc_multi"] = "Damage x{multi}"
+
+
+-- EVENT STRINGS
+L["title_event_lyc_awaken"] = "Lycanthrope Awoke"
+L["desc_event_lyc_awaken"] = "{player} transformed into the Lycanthrope!"
+L["tooltip_lyc_awaken_score"] = "Lycanthrope Awaken: {score}"
+L["lyc_awaken_score"] = "Lycanthrope Awakens:"

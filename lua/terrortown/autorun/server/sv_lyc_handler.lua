@@ -29,6 +29,9 @@ end
 local function UnleashLycanthrope(ply)
   if HasTeammates(ply) then return end
   if ply:GetNWBool("LycTransformed") then return end
+
+  events.Trigger(EVENT_LYC_AWAKEN, ply)
+
   print("[TTT2 Lycanthrope] " .. ply:Nick() .. " is transforming!")
   ply:SetNWBool("LycTransformed", true)
   ply:SetMaxHealth(GetConVar("ttt2_lyc_maxhealth"):GetInt())
