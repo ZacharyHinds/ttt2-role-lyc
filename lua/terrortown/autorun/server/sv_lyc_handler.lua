@@ -18,7 +18,7 @@ local function HasTeammates(ply)
   for _, pl in ipairs(player.GetAll()) do
     if pl == ply then continue end
 
-    if pl:HasTeam(ply:GetTeam()) and pl:Alive() and not pl:IsSpec() then
+    if pl:GetTeam() == ply:GetTeam() and pl:Alive() and not pl:IsSpec() then
       count = count + 1
     end
   end
@@ -77,7 +77,7 @@ end)
 hook.Add("TTT2PostPlayerDeath", "OnLycTeamDeath", function(victim, _, attacker)
   for _, ply in ipairs(player.GetAll()) do
     if ply:GetSubRole() ~= ROLE_LYCANTHROPE  or not ply:Alive() or ply:IsSpec() then continue end
-    if victim:HasTeam(ply:GetTeam()) then
+    if victim:GetTeam() == ply:GetTeam() then
       UnleashLycanthrope(ply)
     end
   end
@@ -94,7 +94,7 @@ end)
 hook.Add("PlayerDisconnected", "LycDisconnectTeam", function(ply)
   for _, pl in ipairs(player.GetAll()) do
     if pl:GetSubRole() ~= ROLE_LYCANTHROPE or not pl:Alive() or pl:IsSpec() then continue end
-    if pl:HasTeam(ply:GetTeam()) then
+    if pl:GetTeam() == ply:GetTeam() then
       UnleashLycanthrope(pl)
     end
   end
@@ -105,7 +105,7 @@ hook.Add("TTT2SpecialRoleSyncing", "TTT2RoleLycHide", function(ply, tbl)
 
   for lyc in pairs(tbl) do
     if lyc:GetSubRole() == ROLE_LYCANTHROPE and not lyc:GetNWBool("LycTransformed") then
-      if ply:GetSubRole() == ROLE_LYCANTHROPE then
+      if ply == lyc then
         tbl[lyc] = {ROLE_INNOCENT, TEAM_INNOCENT}
       else
         tbl[lyc] = {ROLE_NONE, TEAM_NONE}
