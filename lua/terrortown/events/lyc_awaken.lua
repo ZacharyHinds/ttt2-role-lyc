@@ -36,4 +36,8 @@ if SERVER then
             score = 1
         })
     end
+
+    function EVENT:Serialize()
+        return self.event.lyc.nick .. " has awakened as a lycanthrope"
+    end
 end
