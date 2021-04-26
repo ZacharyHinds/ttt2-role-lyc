@@ -18,7 +18,7 @@ L["ttt2_lyc_multi"] = "Damage x{multi}"
 
 
 -- EVENT STRINGS
-L["title_event_lyc_awaken"] = "Lycanthrope Awoke"
+L["title_event_lyc_awaken"] = "The Lycanthrope Awakened"
 L["desc_event_lyc_awaken"] = "{player} transformed into the Lycanthrope!"
-L["tooltip_lyc_awaken_score"] = "Lycanthrope Awaken: {score}"
-L["lyc_awaken_score"] = "Lycanthrope Awakens:"
+L["tooltip_lyc_awaken_score"] = "Became Lycanthrope: {score}"
+L["lyc_awaken_score"] = "Became Lycanthrope:"
